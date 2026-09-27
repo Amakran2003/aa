@@ -1,0 +1,74 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "meta": {
+    "marque": "ABK",
+    "version": "2026-08",
+    "typographie": "General Sans"
+  },
+  "couleur": {
+    "primaire": {
+      "nuit":   { "$type": "color", "$value": "#0A0A1A", "$description": "Fonds sombres, base du dégradé signature" },
+      "marine": { "$type": "color", "$value": "#172554", "$description": "Titres hero, blocs CTA, logo sur fond clair" },
+      "blanc":  { "$type": "color", "$value": "#FDFDFD", "$description": "Fond de page" },
+      "encre":  { "$type": "color", "$value": "#111111", "$description": "Titres de section, texte fort" }
+    },
+    "secondaire": {
+      "navy-900":   { "$type": "color", "$value": "#1E3A8A", "$description": "Fin du dégradé, surfaces profondes" },
+      "signal":     { "$type": "color", "$value": "#2563EB", "$description": "Interaction, liens, focus" },
+      "bleu-400":   { "$type": "color", "$value": "#60A5FA", "$description": "Accents sur fond sombre, légendes" },
+      "bulle":      { "$type": "color", "$value": "#DFE7FB", "$description": "Surfaces douces, badges" },
+      "gris-corps": { "$type": "color", "$value": "#4B5563", "$description": "Texte courant" },
+      "corail":     { "$type": "color", "$value": "#F2784B", "$description": "États d'erreur et usages interdits uniquement" }
+    },
+    "surface": {
+      "brume": { "$type": "color", "$value": "#F4F6FD", "$description": "Fond de section clair teinté" },
+      "halo":  { "$type": "color", "$value": "#EAEFFC", "$description": "Fond de section bleu pâle" }
+    },
+    "texte": {
+      "fort":       { "$type": "color", "$value": "#111111" },
+      "courant":    { "$type": "color", "$value": "#4B5563" },
+      "secondaire": { "$type": "color", "$value": "#6B7280" },
+      "inverse":    { "$type": "color", "$value": "#FDFDFD" }
+    },
+    "bordure": {
+      "clair":  { "$type": "color", "$value": "#E5E7EB" },
+      "sombre": { "$type": "color", "$value": "rgba(255, 255, 255, 0.08)" }
+    }
+  },
+  "degrade": {
+    "signature": {
+      "$type": "gradient",
+      "$value": "radial-gradient(at 20% 15%, #172554 0%, #0A0A1A 55%, #1E3A8A 100%)",
+      "$description": "CTA, navbar, blocs sombres. Source lumineuse décentrée en haut à gauche."
+    }
+  },
+  "rayon": {
+    "carte-min":  { "$type": "dimension", "$value": "32px" },
+    "carte-max":  { "$type": "dimension", "$value": "40px" },
+    "bouton-min": { "$type": "dimension", "$value": "16px" },
+    "bouton-max": { "$type": "dimension", "$value": "24px" },
+    "pill":       { "$type": "dimension", "$value": "9999px" }
+  },
+  "ombre": {
+    "carte": {
+      "$type": "shadow",
+      "$value": "0 24px 48px -12px rgba(23, 37, 84, 0.18), 0 2px 8px -2px rgba(23, 37, 84, 0.08)",
+      "$description": "Ombre douce teintée. Jamais d'ombre grise ou noire."
+    },
+    "halo-sombre": {
+      "$type": "shadow",
+      "$value": "0 0 80px rgba(96, 165, 250, 0.15)",
+      "$description": "Sur fond sombre, remplace l'ombre portée."
+    }
+  },
+  "typographie": {
+    "famille": { "$type": "fontFamily", "$value": "General Sans" },
+    "poids": {
+      "light":    { "$type": "fontWeight", "$value": 300 },
+      "regular":  { "$type": "fontWeight", "$value": 400 },
+      "medium":   { "$type": "fontWeight", "$value": 500 },
+      "semibold": { "$type": "fontWeight", "$value": 600 },
+      "bold":     { "$type": "fontWeight", "$value": 700 }
+    }
+  }
+}

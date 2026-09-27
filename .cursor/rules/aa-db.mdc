@@ -1,0 +1,12 @@
+---
+description: "AA — Drizzle uniquement dans packages/db, schéma unique Docker et Neon."
+globs: packages/db/**/*.ts
+alwaysApply: false
+---
+
+# Base
+
+- Le schéma Drizzle vit ici. Les requêtes aussi.
+- Un seul schéma pour Docker (local) et Neon (production). Le driver change, pas les requêtes.
+- Pas de SQL dans `apps/web` ni dans `packages/core` en dehors de l'appel au dépôt.
+- Redis ne stocke pas un devis, un budget ou une validation. Ça vit dans Postgres.

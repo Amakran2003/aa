@@ -1,0 +1,22 @@
+---
+description: "AA — pas de code tant que le message ne contient pas « code vasy »."
+alwaysApply: true
+---
+
+# Avant d'écrire
+
+Pour une tranche de plus de trois fichiers :
+
+1. Lire `docs/plan.md` et `docs/planning/roadmap.md`.
+2. Lister les fichiers à créer et pourquoi.
+3. Éditer du plus profond au plus haut : contrats, core, db, écran.
+
+# Quand c'est livré
+
+Dans le même tour, une entrée en tête de `docs/journal.md` : la date, ce qui marche, ce qui n'est pas encore là.
+
+# Code seulement sur « code vasy »
+
+Lecture, diagnostic, plan en mots : toujours OK.
+
+Tant que le message ne contient pas **`code vasy`** : pas de code, pas de commit, pas de « je commence déjà ». **`code rien`** arrête tout, même au milieu d'une tranche.

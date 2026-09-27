@@ -1,0 +1,69 @@
+/* ABK — Variables CSS
+   Version 2026-08
+   Source : brand book ABK, planches 06 et 08 */
+
+:root {
+  /* Primaires */
+  --abk-nuit: #0A0A1A;
+  --abk-marine: #172554;
+  --abk-blanc: #FDFDFD;
+  --abk-encre: #111111;
+
+  /* Secondaires */
+  --abk-navy-900: #1E3A8A;
+  --abk-signal: #2563EB;
+  --abk-bleu-400: #60A5FA;
+  --abk-bulle: #DFE7FB;
+  --abk-gris-corps: #4B5563;
+  --abk-corail: #F2784B;
+  --abk-erreur: #9A3412;
+  --abk-verre: rgba(253, 253, 253, 0.62);
+  --abk-verre-fort: rgba(253, 253, 253, 0.72);
+
+  /* Surfaces */
+  --abk-brume: #F4F6FD;
+  --abk-halo: #EAEFFC;
+
+  /* Rôles de texte */
+  --abk-texte-fort: #111111;
+  --abk-texte-courant: #4B5563;
+  --abk-texte-secondaire: #6B7280;
+  --abk-texte-inverse: #FDFDFD;
+
+  /* Bordures */
+  --abk-bordure-clair: #E5E7EB;
+  --abk-bordure-sombre: rgba(255, 255, 255, 0.08);
+
+  /* Dégradé signature */
+  --abk-degrade-signature: radial-gradient(
+    at 20% 15%,
+    #172554 0%,
+    #0A0A1A 55%,
+    #1E3A8A 100%
+  );
+
+  /* Rayons */
+  --abk-rayon-carte: 32px;
+  --abk-rayon-carte-large: 40px;
+  --abk-rayon-bouton: 16px;
+  --abk-rayon-bouton-large: 24px;
+  --abk-rayon-pill: 9999px;
+
+  /* Ombres teintées, jamais grises */
+  --abk-ombre-carte:
+    0 24px 48px -12px rgba(23, 37, 84, 0.18),
+    0 2px 8px -2px rgba(23, 37, 84, 0.08);
+  --abk-halo-sombre: 0 0 80px rgba(96, 165, 250, 0.15);
+
+  /* Typographie */
+  --abk-font: "General Sans", system-ui, -apple-system, sans-serif;
+  --abk-poids-light: 300;
+  --abk-poids-regular: 400;
+  --abk-poids-medium: 500;
+  --abk-poids-semibold: 600;
+  --abk-poids-bold: 700;
+
+  /* Grille de fond, sur fonds sombres uniquement */
+  --abk-grille-maille: 80px;
+  --abk-grille-opacite: 0.10;
+}

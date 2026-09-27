@@ -1,0 +1,14 @@
+---
+description: "AA — le plan fait foi. Produit et transitaire, marge incomplète tant que des cases sont vides."
+alwaysApply: true
+---
+
+# Contexte
+
+`docs/plan.md` fait foi sur le métier. En cas de contradiction avec le code, le plan gagne, puis on aligne le code.
+
+Deux axes au même niveau : le produit, et le transitaire. Un prix d'usine sans cotation de transport n'est pas une marge.
+
+La marge reste non verte tant qu'une de ces cases est vide : fret jusqu'au port, trajet port → adresse (exemple Le Havre → Gennevilliers), honoraire du commissionnaire en douane, droits, TVA.
+
+Le livre et le catalogue fournisseur restent hors du dépôt. On ne les commit pas, on ne les reconstruit pas dans un fichier versionné.

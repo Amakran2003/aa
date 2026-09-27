@@ -1,0 +1,18 @@
+---
+description: "AA — une tranche livrée s'écrit dans le journal le jour même."
+alwaysApply: true
+---
+
+# Journal
+
+La feuille de route est `docs/planning/roadmap.md`. Le métier est `docs/plan.md`.
+
+Quand une tranche est livrée, dans le même tour, ajouter une entrée en tête de `docs/journal.md` :
+
+- la date
+- ce qui marche
+- ce qui n'est pas encore là
+
+On ne marque pas une tranche finie si une case de marge a été inventée pour combler un trou.
+
+À la fin de chaque réponse, dire la suite en une ou deux phrases, d'après `docs/planning/roadmap.md` : ce qui est fait, ce qui vient juste après.

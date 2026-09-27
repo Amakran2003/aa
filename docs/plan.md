@@ -2,6 +2,8 @@
 
 Document de travail pour toi et ton associé. Il fixe le premier outil à construire, le process qu’on fera évoluer, et la façon de chiffrer un produit avant d’écrire à une usine.
 
+L'ordre de construction est dans `docs/planning/roadmap.md`. Ce qui est déjà livré est dans `docs/journal.md`.
+
 Source métier : l’ebook *Business Halal* (texte et figures dans `ebook/`). Le cas concret de départ est la vente de bureaux, avec un budget réel de 10 000 €.
 
 Premier dossier réel : l’échange WhatsApp avec Phoebe (Keno), bureau GS3011, dans `docs/WhatsApp Chat - Phoebe Fournisseur Chine Keno.zip`.
@@ -56,26 +58,44 @@ Les entrepôts ne sont pas dans l’outil. On les cherche à la main. Le jour o�
 
 ## 4. Stack
 
-Une seule app **Next.js** (App Router, TypeScript), déployée sur Vercel. Vite ferait un bon écran, mais il faudrait un deuxième service pour les fiches, la file d’envoi, le cron du matin en Chine et les fichiers. Ici tout vit au même endroit : pages, actions serveur, routes, cron.
+Next.js (App Router, TypeScript), un seul dépôt, déployé sur Vercel. La façon de découper le code vient de deux projets déjà en place, pas d’un modèle générique.
 
-Vercel ne vend plus sa propre Postgres ni son KV. Les équivalents du Marketplace, branchés au projet et facturés avec Vercel, sont :
+| Projet | Où | Ce qu’on en garde |
+|---|---|---|
+| Selmea v2 | `Perso/selmea-v2` | Monorepo pnpm. Le métier dans `packages/core`, sans HTTP. Les contrats Zod dans `packages/contracts`. Drizzle seulement dans `packages/db`. L’écran n’importe ni la base ni le métier. `docs/` fait foi. |
+| Wai-Y | `Rodium/wai-i/wai-y` | Le front est déjà un Next.js (`waiy-frontend/app`). Docker pour Postgres et Redis en local. Un contrat partagé, pas deux versions du même type. |
+
+On ne recopie pas le Nest de Selmea, ni l’Express et le Prisma de Wai-Y, ni l’infra AWS. Ici la surface HTTP, c’est Next. Le cron du matin en Chine est une route Vercel, pas un worker séparé.
+
+```
+apps/web              Next.js : pages, actions, routes. Aucun SQL.
+packages/contracts    Zod, types d’écran et d’API
+packages/core         marge, incoterms, pipeline. Pas de Next, pas de HTTP.
+packages/db           Drizzle, seul endroit qui parle à Postgres
+docker-compose.yml    Postgres et Redis locaux
+docs/plan.md          le métier
+```
+
+Une page valide avec `contracts`, appelle `core`, et `core` passe par `db`. Pas de deuxième calcul de marge dans un composant.
+
+Vercel ne vend plus sa propre Postgres ni son KV. Les équivalents du Marketplace :
 
 | Rôle | Production | Développement |
 |---|---|---|
-| Données du CRM (produits, fournisseurs, devis, messages, pipeline, comptes) | Neon Postgres | Postgres dans Docker |
-| File courte, verrous, cache de pages scrapées | Upstash Redis | Redis dans Docker |
-| Images de fiches et captures | Vercel Blob | Dossier local `.data/blob` |
+| Données du CRM | Neon Postgres | Postgres dans Docker |
+| Verrous, cache de pages scrapées | Upstash Redis | Redis dans Docker |
+| Images de fiches | Vercel Blob | Dossier local `.data/blob` |
 | Navigateur des agents | Browserless cloud | Browserless cloud, ou l’image Docker open source sans captcha |
 
-Upstash, c’est le Redis dont tu parles. Redis ne porte pas le métier. Une validation, un devis ou un budget réel vivent dans Postgres. Si Redis se vide, la file du matin se reconstruit depuis les messages déjà en base. Redis sert à ne pas lancer deux sessions Browserless sur la même fiche, à limiter les envois, et à garder quelques heures une page déjà lue.
+Redis ne porte pas le métier. Une validation, un devis ou un budget réel vivent dans Postgres. Si Redis se vide, la file du matin se reconstruit depuis les messages déjà en base.
 
-L’accès aux données passe par **Drizzle**. Un seul schéma. En local le driver parle à Docker. En production il parle à Neon (`@neondatabase/serverless`). On ne réécrit pas les requêtes entre les deux.
+Drizzle a un seul schéma. En local le driver parle à Docker. En production il parle à Neon (`@neondatabase/serverless`). On ne réécrit pas les requêtes entre les deux.
 
-Les comptes sont les nôtres : deux utilisateurs, sessions en Postgres, via Auth.js. Pas d’abonnement d’auth pour deux personnes. Les mots de passe ne sont pas en clair.
+Les comptes sont les nôtres : deux utilisateurs, sessions en Postgres, via Auth.js. Pas d’abonnement d’auth pour deux personnes.
 
-Le cron Vercel réveille l’app dans la fenêtre Chine (section 12). Il lit les messages « programmés » en base et les propose à l’envoi. On n’ajoute pas une deuxième file tant que Postgres suffit.
+Le cron Vercel réveille l’app dans la fenêtre Chine. Il lit les messages « programmés » en base. On n’ajoute pas une deuxième file tant que Postgres suffit.
 
-On branche Neon et Upstash le jour du premier déploiement, avec l’intégration Vercel (`vercel integration add neon` et `vercel integration add upstash`), pour que les variables d’environnement arrivent seules. D’ici là, `docker compose` suffit pour développer.
+On branche Neon et Upstash au premier déploiement (`vercel integration add neon` et `vercel integration add upstash`). D’ici là, `docker compose` suffit pour Postgres et Redis. Next, lui, tourne sur la machine, comme sur Vercel.
 
 ## 5. Utilisateurs
 
@@ -103,6 +123,8 @@ Le pipeline est une liste d’étapes qu’on réordonne dans l’application. D
 Étapes déjà prévues dans la liste, activées plus tard : packing list, contrôle qualité, commande, boutique, ventes.
 
 Une étape peut être sautée (pas d’échantillon si le fournisseur l’offre et que vous assumez le risque). Le saut est noté.
+
+À l’écran, le départ demande le lien et le budget total. Ensuite une carte montre le produit et les modèles proches. La part mise de côté vient avec la marge. L’enveloppe qui reste est le maximum pour ramener les produits. Le détail est dans `docs/planning/etapes.md`. Le budget réel ne part pas dans un message.
 
 ## 7. Parcours d’un produit
 

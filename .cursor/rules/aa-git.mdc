@@ -1,0 +1,12 @@
+---
+description: "AA — dépôt public. Pas de secret, pas le livre, pas le catalogue."
+alwaysApply: true
+---
+
+# Git
+
+- Pas de force-push sur `main`.
+- Ne jamais committer `.env`, `.env.*` (sauf `.env.example`), `node_modules/`, `.next/`, `dist/`.
+- Ne jamais committer `EBOOK_BUSINESS_HALAL.pdf`, `ebook/content.jsonl`, `ebook/images/`, ni un zip qui contient le catalogue fournisseur.
+- Le texte de la conversation Phoebe peut être versionné. Le PDF du catalogue, non.
+- Message court, en français, qui dit pourquoi.

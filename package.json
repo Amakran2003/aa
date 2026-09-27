@@ -1,0 +1,14 @@
+{
+  "name": "aa",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm --filter @aa/web dev",
+    "build": "pnpm --filter @aa/web build",
+    "worker": "pnpm --filter @aa/worker dev",
+    "db:push": "pnpm --filter @aa/db push"
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}

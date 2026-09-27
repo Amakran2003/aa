@@ -6,3 +6,13 @@ ebook/images/
 
 # L'export WhatsApp contient le catalogue fournisseur.
 docs/*.zip
+
+.DS_Store
+*.tsbuildinfo
+node_modules
+.next
+dist
+.data
+.env
+.env.*
+!.env.example

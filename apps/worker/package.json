@@ -1,0 +1,12 @@
+{
+  "name": "@aa/worker",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --experimental-strip-types src/index.ts"
+  },
+  "dependencies": {
+    "@aa/contracts": "workspace:*",
+    "@aa/core": "workspace:*"
+  }
+}

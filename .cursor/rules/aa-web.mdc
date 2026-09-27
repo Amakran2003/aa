@@ -1,0 +1,12 @@
+---
+description: "AA — l'app Next valide et appelle le métier, elle ne calcule pas la marge."
+globs: apps/web/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# Web
+
+- Valider les entrées avec `packages/contracts`.
+- Appeler `packages/core` pour la marge, le pipeline et les messages.
+- Ne pas importer `packages/db` ni `drizzle-orm`.
+- Ne pas dupliquer un seuil (100 €, 7 000 €, 12,3 %) dans un composant. Ces chiffres viennent du projet en base, ou de `core`.

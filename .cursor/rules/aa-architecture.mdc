@@ -1,0 +1,19 @@
+---
+description: "AA — Next.js en surface, métier et base dans des paquets séparés."
+alwaysApply: true
+---
+
+# Architecture
+
+```
+apps/web              Next.js. Pages, actions, routes. Aucun SQL.
+packages/contracts    Zod. Types partagés écran et serveur.
+packages/core         Marge, incoterms, pipeline. Pas de Next, pas de HTTP.
+packages/db           Drizzle. Seul paquet qui importe le client Postgres.
+```
+
+- `apps/web` importe `contracts` et `core`. Jamais `db`, jamais `drizzle-orm`.
+- `core` importe `db` et `contracts`. Il ne connaît pas Next.
+- `db` n'importe ni `core`, ni `web`.
+- Un calcul de marge n'existe qu'une fois, dans `core`.
+- Postgres et Redis locaux : `docker compose`. Next tourne sur la machine.

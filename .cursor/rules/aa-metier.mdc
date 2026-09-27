@@ -1,0 +1,13 @@
+---
+description: "AA — ne pas inventer un fret, un droit de douane ou un prix absent du devis."
+alwaysApply: true
+---
+
+# Métier
+
+- Une case sans devis reste vide. On n'y met pas un nombre « raisonnable ».
+- L'incoterm dit qui paie le fret, l'assurance, les droits et la TVA. EXW laisse ces cases au transitaire. DDP les inclut dans le prix usine.
+- Le 70/30 du livre est un split bateau / avion, ou un acompte 30 % puis 70 % après contrôle. Ce n'est pas une part du prix.
+- Le budget annoncé au fournisseur et le budget réel du projet sont deux champs. Le budget réel ne part pas dans un message.
+- Les entrepôts se cherchent à la main. Pas de module entrepôt.
+- Cotisations micro-entreprise : pourcentage du chiffre encaissé, réglage du projet, pas un montant en dur.
