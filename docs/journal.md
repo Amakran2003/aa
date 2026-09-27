@@ -2,6 +2,10 @@
 
 Une entrée par tranche livrée. La date, ce qui est en place, ce qui ne l'est pas.
 
+## 2026-09-27 — Produit ouvert, au-dessus sur petit écran
+
+Ouvrir un modèle depuis la conversation le pose à droite sur un grand écran, au-dessus sur un écran étroit. Fermer reste collé en haut. « Ouvrir en grand » n'est plus là : « Passer à ce produit » met cette fiche à la place du produit du fil, et les modèles proches restent affichés. Le budget n'est pas en base. Le repère d'étape à gauche n'est pas là.
+
 ## 2026-09-27 — Lien, budget, une carte
 
 Le départ demande le lien et le budget total. Le fil reste en haut : d'abord la lecture, puis une carte « Voici le produit ». Les modèles proches arrivent dans cette carte, sans le décompte des sites. Ensuite le champ du bas est un message. Le budget n'est pas en base. Le repère d'étape à gauche n'est pas là.

@@ -13,13 +13,13 @@ export function CompareActions({
         Fermer
       </button>
       <button
-        id="compare-open"
+        id="compare-switch"
         type="button"
         disabled={!ready}
         className="abk-bouton bg-marine px-4 py-2 text-sm font-bold text-blanc disabled:opacity-60"
         onClick={onPromote}
       >
-        Ouvrir en grand
+        Passer à ce produit
       </button>
     </div>
   );

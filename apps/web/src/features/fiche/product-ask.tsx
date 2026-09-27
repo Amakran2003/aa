@@ -192,7 +192,7 @@ export function ProductAsk() {
 
   useEffect(() => {
     if (!sideSheet) return;
-    document.getElementById("compare-open")?.focus();
+    document.getElementById("compare-switch")?.focus();
   }, [sideSheet]);
 
   function closeCompare() {
@@ -222,20 +222,25 @@ export function ProductAsk() {
   function promote() {
     if (!sideSheet) return;
     const next = sideSheet;
-    const token = run.current + 1;
-    run.current = token;
-    setProductShown(false);
+    const hasLists =
+      next.related.length > 0 || (next.offers ?? []).length > 0 || (next.probes ?? []).length >= 3;
+    run.current += 1;
+    setSheet(next);
+    setProductShown(true);
+    setPending(false);
     setSearchSettled((next.probes ?? []).length >= 3);
-    setListsReady(false);
-    setDraft("");
-    setMessages([
-      { id: "user", kind: "user", text: next.url },
-      { id: "read", kind: "assistant", text: "Je lis la fiche." },
-    ]);
-    setPending(true);
+    setListsReady(hasLists);
+    setMessages((current) => {
+      const first = current.find((item) => item.id === "user" && item.kind === "user");
+      const extra = first && first.kind === "user" ? first.text.split("\n").slice(1).join("\n") : "";
+      const text = extra ? `${next.url}\n${extra}` : next.url;
+      return [
+        { id: "user", kind: "user", text },
+        { id: "product", kind: "product" },
+      ];
+    });
     closeCompare();
     scrollRef.current?.scrollTo({ top: 0 });
-    void revealProduct(next, token);
   }
 
   return (
@@ -343,17 +348,19 @@ export function ProductAsk() {
         {column ? (
           <aside className="ask-side" style={{ width: sideWidth }} aria-label="Produit comparé">
             <CompareActions ready={Boolean(sideSheet)} onClose={closeCompare} onPromote={promote} />
-            <CompareStatus pending={sidePending} error={sideError} />
-            {sideSheet ? (
-              <SheetView
-                sheet={sideSheet}
-                density="short"
-                part="fiche"
-                lists={false}
-                activeHref={null}
-                onOpen={openCompare}
-              />
-            ) : null}
+            <div className="ask-side__body">
+              <CompareStatus pending={sidePending} error={sideError} />
+              {sideSheet ? (
+                <SheetView
+                  sheet={sideSheet}
+                  density="short"
+                  part="fiche"
+                  lists={false}
+                  activeHref={null}
+                  onOpen={openCompare}
+                />
+              ) : null}
+            </div>
           </aside>
         ) : null}
       </div>

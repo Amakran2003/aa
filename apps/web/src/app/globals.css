@@ -256,21 +256,58 @@ html {
   min-width: 18rem;
   flex: 1 1 42%;
   flex-direction: column;
-  gap: 0.75rem;
   overflow: auto;
   margin: 0.35rem 0.35rem 0.35rem 0;
-  padding: 0.75rem;
   border: 1px solid rgba(255, 255, 255, 0.55);
   border-radius: var(--abk-rayon-carte);
   background: rgba(253, 253, 253, 0.72);
 }
 
 .ask-side__bar {
+  position: sticky;
+  top: 0;
+  z-index: 2;
   display: flex;
   flex-shrink: 0;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
+  padding: 0.75rem;
+  background: rgba(253, 253, 253, 0.96);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+}
+
+.ask-side__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0 0.75rem 0.75rem;
+}
+
+@media (max-width: 900px) {
+  .ask-split {
+    flex-direction: column;
+  }
+
+  .ask-side {
+    order: -1;
+    width: auto !important;
+    min-width: 0;
+    flex: 1 1 0;
+    max-height: 58%;
+    margin: 0.35rem 0.35rem 0;
+  }
+
+  .ask-scroll {
+    flex: 1 1 0;
+    min-height: 8rem;
+  }
+
+  .ask-split__handle {
+    display: none;
+  }
 }
 
 .ask-shell--split .ask-side {
