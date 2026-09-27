@@ -1,0 +1,8 @@
+# Livre et figures : restent en local, pas dans le dépôt public.
+EBOOK_BUSINESS_HALAL.pdf
+ebook/content.jsonl
+ebook/manifest.json
+ebook/images/
+
+# L'export WhatsApp contient le catalogue fournisseur.
+docs/*.zip
