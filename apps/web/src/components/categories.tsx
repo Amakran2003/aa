@@ -1,41 +1,22 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { ProductSheet } from "@aa/contracts";
 
 export function Categories({ sheet }: { sheet: ProductSheet }) {
   const [open, setOpen] = useState<string | null>(null);
   const group = sheet.groups.find((item) => item.name === open) ?? null;
 
-  useEffect(() => {
-    if (!open) return;
-    const close = () => setOpen(null);
-    window.addEventListener("wheel", close, { passive: true });
-    window.addEventListener("touchmove", close, { passive: true });
-    return () => {
-      window.removeEventListener("wheel", close);
-      window.removeEventListener("touchmove", close);
-    };
-  }, [open]);
-
   return (
     <div
-      className="mt-5"
-      onMouseLeave={(event) => {
-        const next = event.relatedTarget;
-        if (next instanceof Node && event.currentTarget.contains(next)) return;
-        const active = document.activeElement;
-        if (active instanceof Node && event.currentTarget.contains(active)) return;
-        setOpen(null);
-      }}
       onBlur={(event) => {
         const next = event.relatedTarget;
         if (next instanceof Node && event.currentTarget.contains(next)) return;
         setOpen(null);
       }}
     >
-      <h3 className="text-sm font-semibold text-encre">Caractéristiques</h3>
-      <div className="mt-3 flex flex-wrap gap-2">
+      <h3 className="text-xs font-medium text-gris">Caractéristiques</h3>
+      <div className="mt-2 flex flex-wrap gap-2">
         {sheet.groups.map((item) => {
           const expanded = open === item.name;
           return (
@@ -46,13 +27,14 @@ export function Categories({ sheet }: { sheet: ProductSheet }) {
               aria-controls={expanded ? "caracteristiques-panel" : undefined}
               onMouseEnter={() => setOpen(item.name)}
               onFocus={() => setOpen(item.name)}
+              onClick={() => setOpen(expanded ? null : item.name)}
               onKeyDown={(event) => {
                 if (event.key === "Escape") setOpen(null);
               }}
-              className={`abk-bouton border px-4 py-2.5 text-base ${
+              className={`rounded-full border px-3 py-1.5 text-sm font-medium ${
                 expanded
-                  ? "border-signal bg-blanc font-semibold text-encre"
-                  : "border-[var(--abk-bordure-clair)] bg-blanc text-encre"
+                  ? "border-marine bg-marine text-blanc"
+                  : "border-[var(--abk-bordure-clair)] bg-blanc text-encre hover:border-signal"
               }`}
             >
               {item.name}
@@ -63,14 +45,14 @@ export function Categories({ sheet }: { sheet: ProductSheet }) {
       {group ? (
         <dl
           id="caracteristiques-panel"
-          className="cut mt-4 grid gap-4 border border-white/80 bg-blanc p-6 shadow-[var(--abk-ombre-carte)] sm:grid-cols-2"
+          className="mt-3 grid gap-3 rounded-[var(--abk-rayon-bouton-large)] border border-[var(--abk-bordure-clair)] bg-blanc p-4 @md:grid-cols-2"
         >
           {group.labels.map((label) => {
             const value = sheet.fields.find((field) => field.label === label)?.value;
             return (
-              <div key={label} className="grid gap-1">
-                <dt className="text-sm text-gris">{label}</dt>
-                <dd className="text-base font-medium break-words text-encre">{value ?? "Absent"}</dd>
+              <div key={label} className="grid min-w-0 gap-0.5">
+                <dt className="text-xs text-gris">{label}</dt>
+                <dd className={`text-sm break-words ${value ? "font-medium text-encre" : "text-gris"}`}>{value ?? "Absent"}</dd>
               </div>
             );
           })}

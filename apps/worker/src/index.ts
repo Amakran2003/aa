@@ -1,5 +1,5 @@
 import { readFileSync } from "node:fs";
-import { recall, remember, takeEnrich } from "@aa/core";
+import { marketsLanded, recall, remember, takeEnrich } from "@aa/core";
 import { enrich } from "./enrich.ts";
 
 function loadEnv() {
@@ -29,9 +29,7 @@ async function loop() {
     if (!url) continue;
     const sheet = await recall(url);
     if (!sheet) continue;
-    const ranked = sheet.offers.every((offer) => typeof offer.close === "boolean");
-    const covered = (sheet.probes ?? []).length >= 3;
-    if (covered && ranked) continue;
+    if (marketsLanded(sheet) && sheet.rates !== undefined) continue;
     const next = await enrich(sheet);
     await remember(next);
   }

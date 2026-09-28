@@ -32,13 +32,13 @@ export function FactoryMarks({ factory }: { factory: FactoryCard | undefined }) 
   if (marks.length === 0) return null;
 
   return (
-    <div className="mt-5">
-      <h3 className="text-sm font-semibold text-encre">Usine</h3>
-      <ul className="mt-3 flex flex-wrap gap-2">
+    <div>
+      <h3 className="text-xs font-medium text-gris">Usine</h3>
+      <ul className="mt-2 flex flex-wrap gap-2">
         {marks.map((mark) => (
           <li
             key={mark.key}
-            className="abk-bouton flex items-center gap-2 border border-[var(--abk-bordure-clair)] bg-blanc px-3 py-2 text-sm font-medium text-encre"
+            className="flex items-center gap-1.5 rounded-full bg-[var(--abk-brume)] px-3 py-1.5 text-sm font-medium text-encre"
           >
             <MarkIcon name={mark.icon} />
             {mark.label}

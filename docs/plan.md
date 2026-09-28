@@ -147,6 +147,12 @@ Seuil de travail, réglable dans le projet : marge nette d’au moins 25–30 % 
 
 L’imposition micro-entreprise se calcule sur le chiffre d’affaires, pas sur le bénéfice. Le taux et le plafond sont des réglages du projet, parce qu’ils bougent. L’ebook recommande la micro-entreprise pour débuter ; le choix du statut reste le vôtre, l’outil ne le décide pas.
 
+### Estimation avant les devis
+
+Avant tout devis, l’outil peut estimer ce que le budget ramène, à une condition : chaque chiffre dit sa source. Le prix usine vient de la fiche. La livraison vient du calcul que le site fait lui-même vers la France pour la commande minimum (Alibaba le donne pour une partie des bureaux, avec le délai et la mention « droits non compris »). Les droits viennent du tarif douanier quand le produit a un taux connu. La TVA import est de 20 %. Sans livraison affichée, l’estimation s’arrête et renvoie au message : pas de fret « raisonnable ».
+
+Cette estimation n’est pas la marge. Elle ne passe jamais au vert. Les cases de la marge restent vides tant que le transitaire et le commissionnaire n’ont pas chiffré.
+
 ### Ce qui entre dans le coût unitaire
 
 - Prix marchandise (EXW de la fiche, puis EXW confirmé).

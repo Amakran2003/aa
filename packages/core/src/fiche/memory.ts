@@ -38,6 +38,11 @@ async function cache(): Promise<Redis | null> {
   return redis;
 }
 
+function reason(error: unknown): string {
+  const cause = error instanceof Error && error.cause instanceof Error ? error.cause : error;
+  return cause instanceof Error ? cause.message : String(cause);
+}
+
 function bucket(): S3Client | null {
   const endpoint = process.env.S3_ENDPOINT;
   const accessKeyId = process.env.S3_ACCESS_KEY;
@@ -79,7 +84,8 @@ export async function recall(url: string): Promise<ProductSheet | null> {
     const client = await cache();
     if (client) await client.set(cacheKey(url), JSON.stringify(stored), "EX", 60 * 60 * 24);
     return stored;
-  } catch {
+  } catch (error) {
+    console.error(`Fiche non relue en base (${url}) : ${reason(error)}`);
     return null;
   }
 }
@@ -99,8 +105,8 @@ export async function remember(sheet: ProductSheet, html?: string): Promise<void
   }
   try {
     await upsertSheet(sheet.url, sheet, key);
-  } catch {
-    /* la fiche s'affiche quand même */
+  } catch (error) {
+    console.error(`Fiche non enregistrée en base (${sheet.url}) : ${reason(error)}`);
   }
   try {
     const store = await cache();

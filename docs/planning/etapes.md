@@ -1,85 +1,57 @@
 # Étapes à l'écran, et le budget
 
-Le pipeline complet reste dans `docs/plan.md` (idée, fiche, simulation, décision, fournisseurs, message, envoi). Ici, c'est ce que l'écran montre, et comment le budget entre dans le prix.
+Le pipeline complet reste dans `docs/plan.md` (idée, fiche, simulation, décision, fournisseurs, message, envoi). Ici, c'est ce que l'écran montre, et comment le budget entre dans le calcul.
 
-Le départ demande le lien et le budget total. Ensuite une seule carte dit « Voici le produit » et, un temps après, les modèles proches. Le champ du bas devient un message. Le repère d'étape à gauche n'est pas encore là.
+L'écran reste une discussion. L'assistant guide : il pose une étape à la fois, et chaque étape finit par un seul bouton qui mène à la suivante. L'utilisateur ne cherche rien sous la page.
 
 ## Ce que l'écran montre
 
-À gauche, dans la marge, un seul repère : l'étape en cours. Exemple : « 2 · Budget ».
+En haut du fil, un repère d'étapes : Produit, Fournisseurs, Messages, Simulation, Transport. L'étape en cours est marquée. Une étape faite se clique et ramène à son bloc. Une étape future ne se clique pas.
 
-Dès qu'une fiche s'ouvre, ce repère monte et flotte au-dessus du fil. Au survol, et au clavier, il se déplie : étapes faites, étape en cours, étapes qui restent. Une étape future ne se clique pas.
+Chaque étape arrive comme un message de l'assistant : une phrase courte, puis un bloc. Le bouton du bas du bloc dit ce qui vient ensuite. Les blocs d'avant restent dans le fil.
 
-Dans la fenêtre, on parle. L'assistant appelle un bloc déjà écrit. En bas de son message : **Passer à l'étape suivante**. On avance seulement par là, et seulement si la règle de l'étape est tenue. Sinon le bouton nomme ce qui manque.
+## Les étapes
 
-## Les étapes visibles
-
-1. **Article** — le lien, la fiche lue. Règle : une fiche est là, chaque champ lu ou marqué absent.
-2. **Marché** — le même produit sur Made-in-China, Alibaba, DHgate, et les autres sites chinois dès qu'une page se lit. Chaque offre garde son prix. Règle : la recherche a tourné, les prix sont affichés.
-3. **Budget** — avec le lien, avant la recherche. Règle : le budget total est tapé par l'utilisateur. La part mise de côté vient avec la marge.
-4. **Tranche** — on coche ceux qu'on garde. Règle : la sélection est enregistrée, y compris si on n'en garde aucun.
-5. **Marge** — une case par poste. Règle pour la suite : on a vu l'enveloppe, et les cases vides sont nommées. La marge ne passe pas au vert tant qu'une case due est vide.
-6. **Message** — un brouillon par usine retenue. Le budget réel n'y entre pas. Règle : le texte est validé par un humain.
-7. **Envoi** — la file, fenêtre 9 h–11 h heure Chine, quelques messages à la fois.
+1. **Produit** — le départ demande le lien et le budget total. La fiche s'affiche, puis les meilleurs prix sur Made-in-China, Alibaba et DHgate. Quand la recherche est finie, une fenêtre dit combien d'usines passent les critères du livre et propose de les choisir.
+2. **Fournisseurs** — les usines qui passent les critères du livre sont cochées d'avance, trois au plus : même type de produit, au moins 2 ans sur le site. On en coche cinq au maximum, pour ne pas écrire pour rien. Chaque fiche s'ouvre en arrière-plan : paliers de prix, MOQ, rôle (fabricant ou négoce), prix de l'échantillon et sa livraison vers la France quand le site la donne. Un cadre vendu sans plateau est signalé.
+3. **Messages** — un message par usine choisie, en anglais, tiré du livre : un échantillon, les prix EXW et DDP France à 100, 300 et 500 pièces, carton, poids, CBM et code HS, certifications, délai, paiement 30 % puis 70 %. Le budget réel n'y entre jamais. On copie, on ouvre la page de l'usine, on marque envoyé. Rien ne part tout seul.
+4. **Simulation** — la réponse en une phrase : combien de bureaux le budget ramène livrés en France, et à quel prix pièce. Voir « Simulation » plus bas.
+5. **Transport** — la packing list du lot (cartons, volume, poids) pour le transitaire. Le devis du transitaire arrive dans une tranche suivante.
 
 ## Budget — ce qu'on demande
 
-Trois nombres, tapés par l'utilisateur. Aucun n'est prérempli avec le scénario bureau.
+Le départ demande le budget total, et seulement lui. La simulation propose deux champs de plus, jamais préremplis avec le scénario bureau :
 
 | Champ | Sens |
 |---|---|
-| Budget total | Ce qu'on est prêt à mettre pour tout le projet |
-| Part mise de côté | Entrepôt, voiture, tout ce qui n'est pas la marchandise rendue. L'outil ne cherche pas l'entrepôt. Zéro veut dire : tout le budget sert à ramener les produits |
-| Prix de vente visé | Le prix auquel on compte vendre, plus tard, pour expliquer la marge. Ce n'est pas le budget |
+| Mis de côté | Entrepôt, voiture, tout ce qui n'est pas la marchandise rendue. Vide veut dire zéro : tout le budget sert à ramener les produits |
+| Prix de vente visé | Facultatif. Sans lui, pas de marge affichée |
 
-L'enveloppe marchandise = budget total − part mise de côté.
+L'enveloppe = budget total − mis de côté.
 
-C'est le maximum de cash pour : prix usine, fret jusqu'au port, trajet port → adresse, honoraire du commissionnaire, droits, TVA.
+Le budget annoncé au fournisseur est un autre sujet. Le message demande des paliers de prix. Il ne recopie jamais le budget total.
 
-Le budget annoncé au fournisseur est un autre champ, plus tard, à l'étape Message. Il ne recopie jamais le budget total.
+## Simulation
 
-## Ce que l'assistant explique
+La simulation est une estimation. Elle dit toujours d'où vient chaque chiffre, et elle ne passe jamais au vert.
 
-Il dit l'enveloppe, et la liste de ce qu'elle couvre.
+Pour une usine choisie, elle prend :
 
-Le prix usine maximum par pièce n'est dit que lorsque les deux conditions sont là :
+- le prix usine au palier de la quantité, lu sur la fiche ;
+- la livraison vers la France que le site calcule pour la commande minimum, ramenée à la pièce ;
+- les droits de douane quand le produit a un taux connu (meuble de bureau en métal, code 9403 : 0 %, à confirmer avec le commissionnaire), sinon la mention « droits non chiffrés » ;
+- la TVA import à 20 % sur la marchandise et la livraison.
 
-- une quantité écrite (le MOQ de la fiche, ou une quantité choisie dans la tranche) ;
-- chaque case que l'incoterm laisse à notre charge est remplie par un devis.
+Elle cherche la plus grande quantité dont le coût rendu tient dans l'enveloppe, palier par palier. Elle montre trois quantités, comme le livre : l'échantillon (seul achat immédiat), ce que le budget paie, et le palier demandé à l'usine (300 pièces).
 
-Tant qu'une case due est vide, l'assistant répète l'enveloppe et nomme la case. Il ne propose pas un prix « raisonnable ».
+Si le site ne donne pas la livraison, la simulation le dit et renvoie au message. Elle n'invente pas de fret.
 
-Quand les cases sont remplies :
+La marge par pièce, si un prix de vente est tapé : prix de vente − coût rendu − cotisations − frais de paiement. Cotisations micro-entreprise 12,3 % du chiffre encaissé et paiement 1,5 % par défaut, réglables. Le livre vise au moins 25 à 30 % net.
 
-prix usine max = (enveloppe ÷ quantité) − (fret + trajet intérieur + commissionnaire + droits + TVA) ÷ quantité.
-
-Si ce nombre est négatif, ou si le cash rendu dépasse l'enveloppe, la ligne est hors budget. On peut quand même demander un prix à l'usine. On ne la retient pas.
-
-Le scénario bureau du plan (10 000 €, dont 7 000 € pour tout ramener et 3 000 € pour l'entrepôt et la voiture, vente à 400 €) est un exemple déjà enregistré. L'écran utilise les nombres tapés, pas cet exemple.
-
-## Le prix dans le marché
-
-Chaque offre affiche son prix, en grand.
-
-- Plafond pas encore calculé : le prix est là, avec la mention « plafond unitaire pas encore calculé », et l'enveloppe à côté.
-- Plafond calculé : une offre au-dessus est marquée hors budget. Elle peut rester dans les produits à explorer. Elle n'entre pas seule dans la tranche.
-
-On garde le moins cher qui tient dans l'enveloppe, pas le prix d'usine le plus bas.
-
-## Blocs que l'assistant peut poser
-
-L'assistant ne dessine pas l'écran. Il appelle un de ces blocs, avec les données de l'étape.
-
-| Bloc | Étape | Rôle |
-|---|---|---|
-| Fiche | Article | Ce qui est lu, ce qui est absent |
-| Budget | Budget | Les trois champs, puis l'enveloppe et les cases encore vides |
-| Sélection | Marché, Tranche | Les offres, le prix, la coche, la marque hors budget quand le plafond existe |
-| Marge | Marge | Une case par poste, vide sans devis |
-| Brouillon | Message | Le texte à relire. Pas le budget réel dedans |
+La marge verte reste celle de la tranche transitaire : elle attend les devis, case par case, comme dit le plan.
 
 ## Ordre de construction
 
 1. Cette page fait foi pour l'écran et pour le budget.
-2. Tranche 2 : le départ demande le lien et le budget total. Une carte montre la fiche, puis les modèles proches avec leur prix. Pas de plafond calculé.
-3. Tranche 3 : la part mise de côté, le prix de vente, les cases de marge. Le plafond unitaire apparaît seulement là.
+2. Produit, Fournisseurs, Messages, Simulation dans le fil. Transport annoncé.
+3. Transitaire : la packing list part, son devis remplit les cases, la marge case par case s'en sert.

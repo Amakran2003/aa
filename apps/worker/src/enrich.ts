@@ -1,71 +1,138 @@
-import type { Market, MarketProbe, Offer, ProductSheet } from "@aa/contracts";
-import { offersFromMarket, pageBlocked, searchQueries, searchTargets } from "@aa/core";
+import type { Currency, Market, MarketProbe, Offer, ProductSheet, Rates } from "@aa/contracts";
+import { SEARCH_VERSION } from "@aa/contracts";
+import {
+  CURRENCIES,
+  offersFromMarket,
+  pageBlocked,
+  rankOffers,
+  remember,
+  searchQueries,
+  searchTargets,
+} from "@aa/core";
+import { readSearchPages } from "./browse.ts";
 
 const MAX_BYTES = 2_000_000;
 
-export async function enrich(sheet: ProductSheet): Promise<ProductSheet> {
-  const [compared, groups, offers] = await Promise.all([
-    markSimilar(sheet),
-    groupFields(sheet),
-    collectOffers(sheet),
-  ]);
-  return { ...compared, groups, offers: offers.offers, probes: offers.probes };
+async function euroRates(): Promise<Rates | null> {
+  const wanted = CURRENCIES.filter((currency) => currency !== "EUR");
+  try {
+    const response = await fetch(`https://api.frankfurter.app/latest?from=EUR&to=${wanted.join(",")}`, {
+      signal: AbortSignal.timeout(8000),
+    });
+    if (!response.ok) return null;
+    const payload = (await response.json()) as { date?: string; rates?: Partial<Record<Currency, number>> };
+    if (!payload.date || !payload.rates) return null;
+    return { base: "EUR", date: payload.date, values: payload.rates };
+  } catch {
+    return null;
+  }
 }
 
-async function collectOffers(sheet: ProductSheet): Promise<{ offers: Offer[]; probes: MarketProbe[] }> {
+export async function enrich(sheet: ProductSheet): Promise<ProductSheet> {
   const queries = searchQueries(sheet);
-  const markets: Market[] = ["made-in-china", "alibaba", "dhgate"];
-  if (queries.length === 0) {
-    return { offers: [], probes: markets.map((source) => ({ source, state: "vide", count: 0 })) };
-  }
-  const grouped = await Promise.all(
-    markets.map(async (source) => {
-      const found: Offer[] = [];
-      const seen = new Set<string>();
-      let blocked = false;
-      for (const query of queries) {
-        const target = searchTargets(query).find((item) => item.source === source);
-        if (!target) continue;
-        try {
-          const response = await fetch(target.url, {
-            headers: { "user-agent": "Mozilla/5.0" },
-            redirect: "follow",
-            signal: AbortSignal.timeout(15000),
-          });
-          const html = await response.text();
-          const host = new URL(target.url).hostname;
-          if (!response.ok || html.length > MAX_BYTES || pageBlocked(html, host)) {
-            blocked = true;
-            continue;
-          }
-          for (const offer of offersFromMarket(source, html, sheet.url)) {
-            if (seen.has(offer.href)) continue;
-            seen.add(offer.href);
-            found.push(offer);
-          }
-        } catch {
-          blocked = true;
-        }
-      }
-      const probe: MarketProbe = {
-        source,
-        state: found.length > 0 ? "lu" : blocked ? "bloque" : "vide",
-        count: found.length,
-      };
-      return { found, probe };
-    }),
-  );
+  const labels = sheet.fields
+    .filter((field) => field.value && !HIGHLIGHTS.has(field.label))
+    .map((field) => field.label);
+  const groups = fallbackGroups(labels);
+  const [rates, ...first] = await Promise.all([
+    euroRates(),
+    collectMarket(sheet, "made-in-china", queries),
+    collectMarket(sheet, "alibaba", queries),
+  ]);
+  const base = { ...sheet, rates, searchVersion: SEARCH_VERSION };
+  await remember(listed(base, groups, first));
+  const dhgate = await collectMarket(sheet, "dhgate", queries);
+  const done = listed(base, groups, [...first, dhgate]);
+  await remember(done);
+  return done;
+}
+
+function listed(
+  sheet: ProductSheet,
+  groups: ProductSheet["groups"],
+  buckets: { found: Offer[]; probe: MarketProbe }[],
+): ProductSheet {
+  return rankOffers(merged(sheet, groups, buckets));
+}
+
+function merged(
+  sheet: ProductSheet,
+  groups: ProductSheet["groups"],
+  buckets: { found: Offer[]; probe: MarketProbe }[],
+): ProductSheet {
   const seen = new Set<string>();
   const offers: Offer[] = [];
-  for (const group of grouped) {
-    for (const offer of group.found) {
+  const ordered = [
+    ...buckets.filter((bucket) => bucket.probe.source !== "made-in-china"),
+    ...buckets.filter((bucket) => bucket.probe.source === "made-in-china"),
+  ];
+  for (const bucket of ordered) {
+    for (const offer of bucket.found) {
       if (seen.has(offer.href) || offer.href === sheet.url) continue;
       seen.add(offer.href);
       offers.push(offer);
-      if (offers.length >= 24) break;
     }
   }
-  return { offers, probes: grouped.map((group) => group.probe) };
+  return { ...sheet, groups, offers, probes: buckets.map((bucket) => bucket.probe) };
+}
+
+async function collectMarket(
+  sheet: ProductSheet,
+  source: Market,
+  queries: string[],
+): Promise<{ found: Offer[]; probe: MarketProbe }> {
+  const found: Offer[] = [];
+  const seen = new Set<string>();
+  let blocked = false;
+  const targets = queries.flatMap((query) => searchTargets(query).filter((item) => item.source === source));
+  if (queries.length === 0) {
+    return { found, probe: { source, state: "vide", count: 0 } };
+  }
+  if (source === "dhgate") {
+    try {
+      const pages = await readSearchPages(targets.map((item) => item.url));
+      for (const html of pages) {
+        if (!html) {
+          blocked = true;
+          continue;
+        }
+        for (const offer of offersFromMarket("dhgate", html, sheet.url, sheet.title ?? "")) {
+          if (seen.has(offer.href)) continue;
+          seen.add(offer.href);
+          found.push(offer);
+        }
+      }
+    } catch {
+      blocked = true;
+    }
+  } else {
+    for (const target of targets) {
+      try {
+        const response = await fetch(target.url, {
+          headers: { "user-agent": "Mozilla/5.0" },
+          redirect: "follow",
+          signal: AbortSignal.timeout(20000),
+        });
+        const html = await response.text();
+        const host = new URL(target.url).hostname;
+        if (!response.ok || html.length > MAX_BYTES || (source !== "alibaba" && pageBlocked(html, host))) {
+          blocked = true;
+          continue;
+        }
+        for (const offer of offersFromMarket(source, html, sheet.url, sheet.title ?? "")) {
+          if (seen.has(offer.href)) continue;
+          seen.add(offer.href);
+          found.push(offer);
+        }
+      } catch {
+        blocked = true;
+      }
+    }
+  }
+  return {
+    found,
+    probe: { source, state: found.length > 0 ? "lu" : blocked ? "bloque" : "vide", count: found.length },
+  };
 }
 
 async function markSimilar(sheet: ProductSheet): Promise<ProductSheet> {

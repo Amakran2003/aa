@@ -41,17 +41,21 @@ Les chiffres du scénario bureau (7 000 € pour tout ramener, vente à 400 €,
 
 Fini quand : une fiche sans CBM affiche une marge incomplète, et saisir un fret à la main recalcule sans toucher aux cases encore vides.
 
-## Tranche 4 — Transitaire
+## Tranche 4 — Fournisseurs, messages, simulation
 
-Même gravité que le produit. Tu colles une URL ou un nom, tu qualifies (verified, Trade Assurance, ancienneté, part d'export Europe, port), tu colles son devis. L'incoterm coche les cases que son prix inclut déjà. Le reste reste à ta charge.
+Le détail est dans `docs/planning/etapes.md`. Le fil devient un parcours guidé : Produit, Fournisseurs, Messages, Simulation, Transport annoncé.
+
+Les usines qui passent les critères du livre sont cochées d'avance, cinq au plus. Leur fiche s'ouvre en arrière-plan, avec l'échantillon et sa livraison vers la France quand Alibaba la calcule. Un message du livre par usine, en anglais, sans le budget réel : le texte se copie, rien ne part tout seul. La simulation dit combien de pièces le budget ramène livrées en France, avec la source de chaque chiffre. Elle reste une estimation, jamais verte.
+
+Fini quand : à partir d'un lien bureau et de 10 000 €, on arrive sans chercher à trois messages prêts et à une phrase « tu ramènes N bureaux livrés en France », et une usine sans livraison affichée n'a pas de fret inventé.
+
+## Tranche 5 — Transitaire
+
+Même gravité que le produit. Tu colles une URL ou un nom, tu qualifies (verified, Trade Assurance, ancienneté, part d'export Europe, port), tu colles son devis. L'incoterm coche les cases que son prix inclut déjà. Le reste reste à ta charge. La packing list de l'étape Transport part avec la demande.
 
 Fini quand : un devis EXW laisse le fret et la douane vides, un devis DDP les remplit, et la marge de la tranche 3 s'en sert.
 
-## Tranche 5 — Usines et brouillon
-
-Liste d'usines sur le produit. Score accessible / limite / gros poisson à partir du MOQ, de l'ancienneté et du prix, pas du ton du message. Brouillon anglais pour le palier mobilier (intention 30 000 à 40 000 €). Tu valides avant que quoi que ce soit soit considéré comme envoyé. Pas d'envoi automatique dans cette tranche : le texte se copie.
-
-Fini quand : le fil Phoebe, sans prix, se range en « répond, sans devis », et la marge ne bouge pas.
+Ensuite, sur les usines : score accessible / limite / gros poisson à partir du MOQ, de l'ancienneté et du prix, pas du ton du message. Le fil Phoebe, sans prix, se range en « répond, sans devis », et la marge ne bouge pas.
 
 ## Tranche 6 — File du matin
 
