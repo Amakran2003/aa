@@ -3,7 +3,12 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./money": "./src/money.ts",
+    "./parcours": "./src/parcours/index.ts"
+  },
+  "scripts": {
+    "test": "node --experimental-strip-types --test \"src/**/*.test.ts\""
   },
   "dependencies": {
     "@aa/contracts": "workspace:*",

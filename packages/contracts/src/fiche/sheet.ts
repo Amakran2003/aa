@@ -39,6 +39,60 @@ export type Offer = {
   supplier: string | null;
   source: Market;
   close: boolean;
+  years?: number | null;
+} & SupplierSignals;
+
+export type SupplierSignals = {
+  verified?: boolean;
+  assurance?: boolean;
+  rating?: number | null;
+  response?: string | null;
+  employees?: number | null;
+  contact?: string | null;
+};
+
+export const SEARCH_VERSION = 2;
+
+export type PriceTier = {
+  from: number;
+  to: number | null;
+  price: string;
+};
+
+export type Currency = "EUR" | "USD" | "CNY";
+
+export type Rates = {
+  base: "EUR";
+  date: string;
+  values: Partial<Record<Currency, number>>;
+};
+
+export type BestOffer = {
+  href: string;
+  title: string;
+  image: string | null;
+  price: string;
+  low: number;
+  high: number | null;
+  currency: Currency;
+  moq: string | null;
+  supplier: string | null;
+  source: Market;
+  years: number | null;
+} & SupplierSignals;
+
+export type SampleShipping = {
+  amount: number;
+  currency: Currency;
+  quantity: number;
+  transit: string | null;
+  method: string | null;
+  dutiesIncluded: boolean;
+};
+
+export type SampleOffer = {
+  price: string | null;
+  shipping: SampleShipping | null;
 };
 
 export type MarketProbe = {
@@ -62,4 +116,9 @@ export type ProductSheet = {
   related: RelatedProduct[];
   offers: Offer[];
   probes: MarketProbe[];
+  tiers?: PriceTier[];
+  best?: BestOffer[];
+  rates?: Rates | null;
+  sample?: SampleOffer | null;
+  searchVersion?: number;
 };

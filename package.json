@@ -6,7 +6,8 @@
     "dev": "pnpm --filter @aa/web dev",
     "build": "pnpm --filter @aa/web build",
     "worker": "pnpm --filter @aa/worker dev",
-    "db:push": "pnpm --filter @aa/db push"
+    "db:push": "pnpm --filter @aa/db push",
+    "test": "pnpm --filter @aa/core test"
   },
   "engines": {
     "node": ">=24"
